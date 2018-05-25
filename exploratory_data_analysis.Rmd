@@ -1,6 +1,6 @@
 ---
-title: "Lab 1 - Keane"
-author: "Keane Johnson"
+title: "W203 Lab 1 - Cancer"
+author: "Joe Butcher, Stanley Ye, Keane Johnson"
 date: "5/24/2018"
 output: html_document
 ---
