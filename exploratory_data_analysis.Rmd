@@ -1,0 +1,79 @@
+---
+title: "Lab 1 - Keane"
+author: "Keane Johnson"
+date: "5/24/2018"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Univariate Analysis of Key Variables
+
+First, we use univariate analysis and descriptive statistics to analyze our key variables. Some notable variables include: avgAnnCount, medIncome, popEst2015, povertyPercent, MedianAge and AvgHouseholdSize. We'll first plot these variables using histograms to determine if there are any anomalies or oddities in these data.
+
+```{r cars}
+# load the data from the csv
+cancer_data <- read.csv("cancer.csv")
+
+hist(cancer_data$avgAnnCount,
+     breaks="FD",
+     main="Average Annual Counts of Cancer Incidences",
+     xlab="Average Annual Count")
+hist(cancer_date$medIncome,
+     breaks="FD",
+     main="Median Income",
+     xlab="Median Income")
+hist(cancer_data$popEst2015,
+     breaks="FD",
+     main="Estimated Population in 2015",
+     xlab="Population Size")
+hist(cancer_data$povertyPercent,
+     breaks="FD",
+     main="Poverty Percentage",
+     xlab="Poverty Percentage")
+hist(cancer_data$MedianAge,
+     breaks="FD",
+     main="Median Age",
+     xlab="Median Age")
+hist(cancer_data$AvgHouseholdSize,
+     breaks="FD",
+     main="Average Household Size",
+     xlab="Average Household Size")
+```
+
+These histograms provide some interesting insights. First is that there is an interesting spike at around the value 2000 for the variable avgAnnCount. In fact, this value is 1962.667684 and 206 counties have this value. We can speculate as to the reason why this value is so prevalent but is unlikely to be a coincidence. Not much can be gleaned from popEst2015. We will use this variable to normalize avgAnnCount through a avgAnnRate.
+
+MedianAge presents a problem. There appear to be values far above the expected life expectancy of humans. There are thirty counties who have a median age above 123 - the oldest a human has ever lived. These are likely errors in our data set and should be removed.
+
+AvgHouseholdSize looks incomplete. There are sixty-one rows where AvgHouseholdSize is less then 0.1. It is unlikely that fewer than one person lives in every ten houses in these counties.
+
+All other variables appear to have plausible distributions.
+
+## Analysis of Key Relationships
+
+Next, we use scatterplots to identify potential correlations between our deathRate and our independent variables.
+
+```{r}
+scatterplotMatrix( ~ deathRate + povertyPercent,
+    data = cancer_data,
+    main = "Scatterplot deathRate vs. povertyPercent"
+)
+
+scatterplotMatrix( ~ deathRate + medIncome,
+    data = cancer_data,
+    main = "Scatterplot deathRate vs. medIncome"
+)
+```
+There appear to be two key relationships with deathRate: povertyPercent and medIncome. deathRate appears to be positively correlated with povertyPercent and negatively correlated with medIncome. This makes sense because both of these variables measure the same type of information, albeit in opposite ways. These hypotheses are confirmed by taking their respective correlations with deathRate:
+```{r}
+cor(cancer_data$deathRate,
+    cancer_data$povertyPercent,
+    use="complete.obs")
+
+cor(cancer_data$deathRate,
+    cancer_data$medIncome,
+    use="complete.obs")
+```
+These moderately strong correlations match our intution when analyzing the scatterplots of these variables against deathRate. povertyPercent has a correlation of 0.429389 and medIncome has a correlation of-0.4286149.
